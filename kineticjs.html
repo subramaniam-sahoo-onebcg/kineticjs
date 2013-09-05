@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.6.0.min.js"></script>
+    <script >
+        var stage = new Kinetic.Stage({container: 'container', height: 700, width: 578});
+        var image = new Image();
+        var layer = new Kinetic.Layer();
+
+        var animations = {
+          idle: [{
+              y: 2,
+              x: 2,
+              width: 130,
+              height: 125
+            }, {
+              y: 3,
+              x: 130,
+              width: 130,
+              height: 125
+            }, {
+              y: 3,
+              x: 262,
+              width: 130,
+              height: 125
+            }, {
+              y: 2,
+              x: 380,
+              width: 130,
+              height: 125
+            },
+            /****************/
+            {
+              y: 130,
+              x: 2,
+              width: 130,
+              height: 125
+            }, {
+              y: 130,
+              x: 130,
+              width: 130,
+              height: 125
+            }, {
+              y: 130,
+              x: 262,
+              width: 130,
+              height: 125
+            }, {
+              y: 130,
+              x: 380,
+              width: 130,
+              height: 125
+            },
+            /****************/
+            {
+              y: 260,
+              x: 2,
+              width: 130,
+              height: 125
+            }, {
+              y: 260,
+              x: 130,
+              width: 130,
+              height: 125
+            }, {
+              y: 260,
+              x: 262,
+              width: 130,
+              height: 125
+            }, {
+              y: 260,
+              x: 380,
+              width: 130,
+              height: 125
+            },
+            /****************/
+            {
+              y: 380,
+              x: 2,
+              width: 130,
+              height: 125
+            }, {
+              y: 380,
+              x: 130,
+              width: 130,
+              height: 125
+            }, {
+              y: 380,
+              x: 262,
+              width: 130,
+              height: 125
+            }, {
+              y: 380,
+              x: 380,
+              width: 130,
+              height: 125
+            }]
+        };
+
+        image.onload = function() {
+          var yoda = new Kinetic.Sprite({
+            x: 250,
+            y: 40,
+            image: image,
+            animation: 'idle',
+            animations: animations,
+            frameRate: 9,
+            index: 0
+          });
+          layer.add(yoda);
+          stage.add(layer);
+          yoda.start();
+        };
+
+        image.src = 'Walk.png';
+
+
+    </script>
+  </body>
+</html>
