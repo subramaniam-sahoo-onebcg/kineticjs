@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.6.0.min.js"></script>
+    <script >
+        var stage = new Kinetic.Stage({
+          container: 'container',
+          width: 1520,
+          height: 1241
+        });
+        var layer = new Kinetic.Layer();
+
+        var imageObj = new Image();
+        imageObj.onload = function() {
+          var yoda = new Kinetic.Image({
+            x: 0,
+            y: 0,
+            image: imageObj,
+            width: 1420,
+            height: 1041
+          });
+
+          // add the shape to the layer
+          layer.add(yoda);
+
+          // add the layer to the stage
+          stage.add(layer);
+        };
+
+
+        imageObj.src = 'images/Table.jpg';
+
+
+        var imageObj2 = new Image();
+        imageObj2.onload = function() {
+          var yoda2 = new Kinetic.Image({
+            x: 420,
+            y: 620,
+            image: imageObj2,
+            width: 20,
+            height: 20
+          });
+
+          // add the shape to the layer
+          layer.add(yoda2);
+
+          // add the layer to the stage
+          stage.add(layer);
+
+          var anim = new Kinetic.Animation(function(frame) {
+            // console.log(parseInt(frame.time / 1000));
+            var dist = parseInt((frame.time / 1000));
+            yoda2.move(dist, -dist * 0.3);
+          }, layer);
+          anim.start();
+          
+        };
+        imageObj2.src = 'images/Red-Chip.png';
+
+
+
+
+
+    </script>
+  </body>
+</html>

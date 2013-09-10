@@ -113,7 +113,7 @@
             image: image,
             animation: 'idle',
             animations: animations,
-            frameRate: 9,
+            frameRate: 119,
             index: 0
           });
           layer.add(yoda);
@@ -123,7 +123,14 @@
 
         image.src = 'Walk.png';
 
+    var anim = new Kinetic.Animation(function(frame) {
+          // console.log(parseInt(frame.time / 1000));
+          var dist = parseInt(velocity * (frame.time / 1000));
+          hexagon.move(dist, 0);
+        }, layer);
 
+
+        anim.start();
     </script>
   </body>
 </html>
