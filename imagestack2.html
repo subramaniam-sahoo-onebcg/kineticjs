@@ -1,0 +1,97 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.6.0.min.js"></script>
+    <script defer="defer">
+      function writeMessage(messageLayer, message) {
+        var context = messageLayer.getContext();
+        messageLayer.clear();
+        context.font = '18pt Calibri';
+       
+        context.fillText(message, 10, 25);
+      }
+      function loadImages(sources, callback) {
+        var assetDir = 'http://localhost/test/kineticjs/';
+        var images = {};
+        var loadedImages = 0;
+        var numImages = 0;
+        for(var src in sources) {
+          numImages++;
+        }
+        for(var src in sources) {
+          images[src] = new Image();
+          images[src].onload = function() {
+            console.log('111');
+            if(++loadedImages >= numImages) {
+              callback(images);
+            }
+          };
+          images[src].src = assetDir + sources[src];
+        }
+      }
+      function initStage(images) {
+        var stage = new Kinetic.Stage({
+          container: 'container',
+          width: 578,
+          height: 200
+        });
+
+        var shapesLayer = new Kinetic.Layer();
+        var messageLayer = new Kinetic.Layer();
+
+        var monkey = new Kinetic.Image({
+          image: images.monkey,
+          x: 120,
+          y: 50
+        });
+
+        var lion = new Kinetic.Image({
+          image: images.lion,
+          x: 280,
+          y: 30
+        });
+
+        monkey.on('mouseover', function() {
+          writeMessage(messageLayer, 'mouseover monkey');
+        });
+
+        monkey.on('mouseout', function() {
+          writeMessage(messageLayer, '');
+        });
+
+        lion.on('mouseover', function() {
+          writeMessage(messageLayer, 'mouseover lion');
+        });
+
+        lion.on('mouseout', function() {
+          writeMessage(messageLayer, '');
+        });
+
+        lion.createImageHitRegion(function() {
+          shapesLayer.draw();
+        });
+
+        shapesLayer.add(monkey);
+        shapesLayer.add(lion);
+        stage.add(shapesLayer);
+        stage.add(messageLayer);
+      }
+      var sources = {
+        lion: 'images/Red-Chip.png',
+        monkey: 'images/Table.jpg'
+      };
+      loadImages(sources, initStage);
+
+    </script>
+  </body>
+</html>
