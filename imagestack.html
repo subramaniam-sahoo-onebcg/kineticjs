@@ -10,6 +10,7 @@
   </head>
   <body>
     <div id="container"></div>
+    
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.6.0.min.js"></script>
     <script >
         var stage = new Kinetic.Stage({
@@ -34,6 +35,7 @@
 
           // add the layer to the stage
           stage.add(layer);
+          kineticimg.setZIndex(1);
         };
         imageObj.src = 'images/Table.jpg';
 
@@ -49,51 +51,48 @@
 
           // add the shape to the layer
           layer.add(kineticimg2);
-          kineticimg2.setZIndex(10);
+          
           stage.add(layer);
-
-          var tween = new Kinetic.Tween({
-            node: kineticimg2,
-            duration: 4,
-            x: 710,
-            y: 523,
-          });
-          tween.play();
-          // start tween after 2 seconds
-
-
+          kineticimg2.setZIndex(4);
         };
-        console.log(imageObj);
-        //imageObj2.setZIndex(44);
         imageObj2.src = 'images/Red-Chip.png';
 
-        var imageObj3 = new Image();
-        imageObj3.onload = function() {
+        var imageObj2 = new Image();
+        imageObj2.onload = function() {
           var kineticimg2 = new Kinetic.Image({
-            x: 920,
-            y: 620,
-            image: imageObj3,
+            x: 420,
+            y: 617,
+            image: imageObj2,
             width: 20,
             height: 20
           });
 
           // add the shape to the layer
           layer.add(kineticimg2);
+          
           stage.add(layer);
-
-
-          var tween = new Kinetic.Tween({
-            node: kineticimg2,
-            duration: 4,
-            x: 710,
-            y: 523,
-          });
-          tween.play();
-          // start tween after 2 seconds
-
-
+           kineticimg2.setZIndex(5);
         };
-        imageObj3.src = 'images/Red-Chip.png';
+        imageObj2.src = 'images/Red-Chip.png';
+
+        var imageObj2 = new Image();
+        imageObj2.onload = function() {
+          var kineticimg2 = new Kinetic.Image({
+            x: 420,
+            y: 615,
+            image: imageObj2,
+            width: 20,
+            height: 20
+          });
+
+          // add the shape to the layer
+          layer.add(kineticimg2);
+           
+          stage.add(layer);
+          kineticimg2.setZIndex(6);
+        };
+        imageObj2.src = 'images/Red-Chip.png';
+
 
     </script>
   </body>

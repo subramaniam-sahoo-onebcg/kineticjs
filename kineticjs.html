@@ -107,7 +107,7 @@
         };
 
         image.onload = function() {
-          var yoda = new Kinetic.Sprite({
+          var kineticimg = new Kinetic.Sprite({
             x: 250,
             y: 40,
             image: image,
@@ -116,9 +116,9 @@
             frameRate: 119,
             index: 0
           });
-          layer.add(yoda);
+          layer.add(kineticimg);
           stage.add(layer);
-          yoda.start();
+          kineticimg.start();
         };
 
         image.src = 'Walk.png';
