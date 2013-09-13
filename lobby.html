@@ -1,100 +1,11 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-    </style>
   </head>
   <body>
+    <button onclick="createImage()">test</button>
     <div id="container"></div>
-    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.6.0.min.js"></script>
-    <script >
-        var stage = new Kinetic.Stage({
-          container: 'container',
-          width: 1520,
-          height: 1241
-        });
-        var layer = new Kinetic.Layer();
-
-        var imageObj = new Image();
-        imageObj.onload = function() {
-          var kineticimg = new Kinetic.Image({
-            x: 0,
-            y: 0,
-            image: imageObj,
-            width: 1420,
-            height: 1041
-          });
-
-          // add the shape to the layer
-          layer.add(kineticimg);
-
-          // add the layer to the stage
-          stage.add(layer);
-        };
-        imageObj.src = 'images/Table.jpg';
-
-        var imageObj2 = new Image();
-        imageObj2.onload = function() {
-          var kineticimg2 = new Kinetic.Image({
-            x: 420,
-            y: 620,
-            image: imageObj2,
-            width: 20,
-            height: 20
-          });
-
-          // add the shape to the layer
-          layer.add(kineticimg2);
-          kineticimg2.setZIndex(10);
-          stage.add(layer);
-
-          var tween = new Kinetic.Tween({
-            node: kineticimg2,
-            duration: 4,
-            x: 710,
-            y: 523,
-          });
-          tween.play();
-          // start tween after 2 seconds
-
-
-        };
-        console.log(imageObj);
-        //imageObj2.setZIndex(44);
-        imageObj2.src = 'images/Red-Chip.png';
-
-        var imageObj3 = new Image();
-        imageObj3.onload = function() {
-          var kineticimg2 = new Kinetic.Image({
-            x: 920,
-            y: 620,
-            image: imageObj3,
-            width: 20,
-            height: 20
-          });
-
-          // add the shape to the layer
-          layer.add(kineticimg2);
-          stage.add(layer);
-
-
-          var tween = new Kinetic.Tween({
-            node: kineticimg2,
-            duration: 4,
-            x: 710,
-            y: 523,
-          });
-          tween.play();
-          // start tween after 2 seconds
-
-
-        };
-        imageObj3.src = 'images/Red-Chip.png';
-
-    </script>
+    <script src="js/kinetic-v4.6.0.min.js"></script>
+    <script src="js/table-animation.js"></script>
   </body>
 </html>
