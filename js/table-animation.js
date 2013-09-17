@@ -1,3 +1,4 @@
+  /*******************Co-ordinates for table***********************/
   var co_ordinates = {
     table9: {cards:
               [{x: 431, y: 250},
@@ -21,7 +22,7 @@
                 {x: 943, y: 328}]
     }
   };
-
+  /*******************Chips Denominations*******************/
   var chipsImages = {
     1: 'whiteChip.png',
     2: 'yellowChip.png',
@@ -32,7 +33,7 @@
     100: 'blackChip.png'
   };
 
-  // console.log(Object.keys(co_ordinates.table9.cards).length);
+  /*******************Create Kinetic Stage*******************/
   var stage = new Kinetic.Stage({
     container: 'container',
     width: 1520,
@@ -68,61 +69,85 @@
     });
     return items;
   }
+  /*******************Load Images*******************/
+  function loadImages(sources, callback) {
+    var images = {};
+    var loadedImages = 0;
+    var numImages = 0;
+    // get num of sources
+    for (var src in sources) {
+      numImages++;
+    }
+    for (var src in sources) {
+      images[src] = new Image();
+      images[src].onload = function() {
+        if (++loadedImages >= numImages) {
+          callback(images);
+        }
+      };
+      images[src].src = 'images/' + sources[src];
+    }
+  }
 
 
-  /*Create Chip Denominations */
+  loadImages(chipsImages, function(images) {
+    loadedImages = images;
+  });
+
+  /******************* Chip Denominations *******************/
   function drawChips(amount) {
+    var demoninations = chipbreakBreak(amount);
 
-    var chipsImg = {};
-    var kineticimg2 = {};
-    var clone = {};
-    var x = 431;
-    for (var key in chipsImages) {
-      console.log(x);
-      if (chipsImages.hasOwnProperty(key)) {
-        //console.log(chipsImages[key]);
+    var x = 466;
+    var group = new Kinetic.Group();
+    for (var key in loadedImages) {
+      if (loadedImages.hasOwnProperty(key)) {
+        var cloneChipImage = new Kinetic.Image({
+          x: x,
+          image: loadedImages[key],
+          width: 20,
+          height: 20
+        });
 
-        chipsImg[key] = new Image();
-        //  console.log(chipsImages[key]);
-        chipsImg[key].onload = function() {
-
-          kineticimg2[key] = new Kinetic.Image({
-            x: x,
-            image: chipsImg[key],
-            width: 20,
-            height: 20
-          });
-
-          var y = 298;
-       //   for (var i = 1; i <= 1; i++) {
-            clone[key] = kineticimg2[key].clone({y: y});
-            layer.add(clone[key]);
-
-         // }
-          stage.add(layer);
-
-        };
-
-        chipsImg[key].src = 'images/whiteChip.png';
-
+        var y = 326;
+        for (var i = 1; i <= demoninations[key]; i++) {
+          var cloneChip = cloneChipImage.clone({y: y - i * 2});
+          group.add(cloneChip);
+        }
+        stage.add(layer);
       }
-      x = x - 10;
-      // console.log(chipsImg);
+      if (demoninations[key] > 0)
+        x = x - 18;
     }
 
+    var simpleText = new Kinetic.Text({
+      x: 426,
+      y: 350,
+      text: '$' + amount,
+      fontSize: 14,
+      fontFamily: 'Calibri',
+      fill: 'white'
+    });
 
-console.log(chipsImg);
+    group.add(simpleText);
+    layer.add(group);
+    stage.add(layer);
 
 
-
+    var tween = new Kinetic.Tween({
+      node: group,
+      duration: 2,
+      x: 333,
+      y: 222
+    });
+    tween.play();
   }
-  $(function() {
-    drawChips(200);
-  });
-  /*Card Animations */
+  ;
+
+
+  /******************* Card Distribution Animation *******************/
   function CardAnimations() {
     var cardObj = new Image();
-    var p = co_ordinates.table9.cards;
 
     cardObj.onload = function() {
       var kineticimg2 = new Kinetic.Image({
@@ -150,7 +175,7 @@ console.log(chipsImg);
 
           var tween = new Kinetic.Tween({
             node: cardclone,
-            duration: 0.05,
+            duration: 0.10,
             x: playercard.x + cardoffset,
             y: playercard.y
           });
@@ -161,12 +186,11 @@ console.log(chipsImg);
         if (counter >= co_ordinates.table9.cards.length * 2)
           clearInterval(int);
         counter++;
-      }, 100);
+      }, 200);
 
     };
 
     cardObj.src = 'images/Card.png';
   }
-
 
 
