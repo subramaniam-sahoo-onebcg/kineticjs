@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="container"></div>
+    <script src="js/spritemap.js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/kinetic-v4.6.0.min.js" type="text/javascript"></script>
+    <script src="js/card.js"></script>
+
+    <script >
+        console.log(spriteCoordinates.card_normal_2c);
+        var stage = new Kinetic.Stage({
+          container: 'container',
+          width: 578,
+          height: 200
+        });
+
+        var layer = new Kinetic.Layer();
+
+        var animations = {
+          idle: [{
+              x: spriteCoordinates.card_normal_2c.x,
+              y: spriteCoordinates.card_normal_2c.y,
+              width: spriteCoordinates.card_normal_2c.w,
+              height: spriteCoordinates.card_normal_2c.h
+            }]
+        };
+
+        var imageObj = new Image();
+        //  imageObj.onload = function() {
+
+        setTimeout(function() {
+
+
+          var blob = new Kinetic.Sprite({
+            x: 250,
+            y: 40,
+            image: imageObj,
+            animation: 'idle',
+            animations: createImage(spriteCoordinates.card_rear_a_large)
+          });
+
+
+          layer.add(blob);
+          stage.add(layer);
+
+          var tween = new Kinetic.Tween({
+            node: blob,
+            duration: 2,
+            x: 276,
+            y: 100
+          });
+          tween.play();
+        }, 1);
+
+        
+
+        imageObj.src = 'images/poker_table_sprites.png';
+        function createImage(asset) {
+          return {idle: [{
+                x: asset.x,
+                y: asset.y,
+                width: asset.w,
+                height: asset.h
+              }]};
+
+        }
+    </script>
+  </body>
+</html>

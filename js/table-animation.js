@@ -24,13 +24,21 @@
   };
   /*******************Chips Denominations*******************/
   var chipsImages = {
-    1: 'whiteChip.png',
-    2: 'yellowChip.png',
-    5: 'redChip.png',
-    10: 'blueChip.png',
-    20: 'greyChip.png',
-    25: 'greenChip.png',
-    100: 'blackChip.png'
+    0.01: spriteCoordinates.chip_001,
+    0.05: spriteCoordinates.chip_005,
+    0.25: spriteCoordinates.chip_025,
+    1: spriteCoordinates.chip_1,
+    5: spriteCoordinates.chip_5,
+    10: spriteCoordinates.chip_10,
+    25: spriteCoordinates.chip_25,
+    100: spriteCoordinates.chip_100,
+    1000: spriteCoordinates.chip_1000,
+    500: spriteCoordinates.chip_500,
+    5000: spriteCoordinates.chip_5000,
+    25000: spriteCoordinates.chip_25000,
+    250000: spriteCoordinates.chip_250000,
+    5000000: spriteCoordinates.chip_5000000,
+    10000000: spriteCoordinates.chip_100000000
   };
 
   /*******************Create Kinetic Stage*******************/
@@ -62,9 +70,9 @@
   /*Calculate Chip Denominations */
   function chipbreakBreak(amount) {
     var items = new Array();
-    var units = [100, 25, 20, 10, 5, 2, 1];
+    var units = [10000000, 5000000, 250000, 25000, 5000, 500, 1000, 100, 25, 10, 5, 1, 0.25, 0.05, 0.01];
     $.each(units, function(key, unit) {
-      items[unit] = parseInt(amount / unit);
+      items[unit] = parseInt(amount*100 / unit);
       amount %= unit;
     });
     return items;
@@ -90,23 +98,42 @@
   }
 
 
-  loadImages(chipsImages, function(images) {
-    loadedImages = images;
+//  loadImages(chipsImages, function(images) {
+//    loadedImages = images;
+//  });
+
+  var spritesImage = {};
+  loadImages(['poker_table_sprites.png'], function(sprite) {
+    spritesImage = sprite[0];
   });
+
+  setTimeout(function() {
+    console.log(spritesImage);
+  }, 2000);
+
+  function createImageFromSprite(asset) {
+    return {idle: [{
+          x: asset.x,
+          y: asset.y,
+          width: asset.w,
+          height: asset.h
+        }]};
+
+  }
 
   /******************* Chip Denominations *******************/
   function drawChips(amount) {
     var demoninations = chipbreakBreak(amount);
-
+    console.log(demoninations);
     var x = 466;
     var group = new Kinetic.Group();
-    for (var key in loadedImages) {
-      if (loadedImages.hasOwnProperty(key)) {
-        var cloneChipImage = new Kinetic.Image({
+    for (var key in chipsImages) {
+      if (chipsImages.hasOwnProperty(key)) {
+        var cloneChipImage = new Kinetic.Sprite({
           x: x,
-          image: loadedImages[key],
-          width: 20,
-          height: 20
+          image: spritesImage,
+          animation: 'idle',
+          animations: createImageFromSprite(chipsImages[key])
         });
 
         var y = 326;
@@ -144,53 +171,89 @@
   }
   ;
 
-
   /******************* Card Distribution Animation *******************/
-  function CardAnimations() {
-    var cardObj = new Image();
+  function cardDistribute() {
 
+    var kineticimg2 = new Kinetic.Sprite({
+      x: 616,
+      image: spritesImage,
+      animation: 'idle',
+      animations: createImageFromSprite(spriteCoordinates.card_rear_a_large)
+    });
+
+    var y = 318;
+    var i = 0;
+    var cardoffset = 0;
+    var counter = 0;
+    var int = self.setInterval(function() {
+
+
+      var playercard = co_ordinates.table9.cards[i];
+      if (co_ordinates.table9.cards.length <= i) {
+        i = 0;
+        cardoffset = 10;
+      } else {
+        i++;
+        var cardclone = kineticimg2.clone({y: y});
+        layer.add(cardclone);
+        stage.add(layer);
+
+        var tween = new Kinetic.Tween({
+          node: cardclone,
+          duration: 0.10,
+          x: playercard.x + cardoffset,
+          y: playercard.y
+        });
+        tween.play();
+      }
+
+      if (counter >= co_ordinates.table9.cards.length * 2)
+        clearInterval(int);
+      counter++;
+    }, 200);
+
+  }
+
+  /******************* Card Show Animation *******************/
+  function CardShow() {
+    var cardObj = new Image();
     cardObj.onload = function() {
+      var x = 625;
       var kineticimg2 = new Kinetic.Image({
-        x: 616,
+        x: x,
+        y: 338,
         image: cardObj,
         width: 49,
         height: 70
       });
-      var y = 318;
-      var i = 0;
-      var cardoffset = 0;
-      var counter = 0;
+
+      cardclone = kineticimg2.clone();
+      layer.add(cardclone);
+      stage.add(layer);
+      var i = 1;
+
       var int = self.setInterval(function() {
+        cardclone = kineticimg2.clone({x: x});
+        console.log(x);
+        layer.add(cardclone);
+        stage.add(layer);
 
+        var tween = new Kinetic.Tween({
+          node: cardclone,
+          duration: 0.8,
+          x: x + 50,
+          y: 338
+        });
+        tween.play();
 
-        var playercard = co_ordinates.table9.cards[i];
-        if (co_ordinates.table9.cards.length <= i) {
-          i = 0;
-          cardoffset = 10;
-        } else {
-          i++;
-          var cardclone = kineticimg2.clone({y: y});
-          layer.add(cardclone);
-          stage.add(layer);
-
-          var tween = new Kinetic.Tween({
-            node: cardclone,
-            duration: 0.10,
-            x: playercard.x + cardoffset,
-            y: playercard.y
-          });
-          tween.play();
-        }
-
-        console.log(counter);
-        if (counter >= co_ordinates.table9.cards.length * 2)
+        if (i >= 6)
           clearInterval(int);
-        counter++;
-      }, 200);
-
+        i++;
+        x = x + 50;
+      }, 1000);
     };
 
     cardObj.src = 'images/Card.png';
   }
 
-
+  //console.log(spriteCoordinates);
