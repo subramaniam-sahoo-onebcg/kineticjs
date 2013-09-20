@@ -9,17 +9,16 @@
                 {x: 902, y: 585},
                 {x: 1077, y: 521},
                 {x: 1085, y: 333},
-                {x: 909, y: 250}]
-              , chips:
-              [{x: 466, y: 326},
-                {x: 331, y: 336},
-                {x: 353, y: 559},
-                {x: 465, y: 578},
-                {x: 707, y: 575},
-                {x: 931, y: 572},
-                {x: 1059, y: 556},
-                {x: 1070, y: 368},
-                {x: 943, y: 328}]
+                {x: 909, y: 250}],
+      chips: [{x: 466, y: 326},
+        {x: 331, y: 336},
+        {x: 353, y: 559},
+        {x: 465, y: 578},
+        {x: 707, y: 575},
+        {x: 931, y: 572},
+        {x: 1059, y: 556},
+        {x: 1070, y: 368},
+        {x: 943, y: 328}]
     }
   };
   /*******************Chips Denominations*******************/
@@ -59,22 +58,46 @@
       height: 1041
     });
 
-    // add the shape to the layer
     layer.add(kineticimg);
-
-    // add the layer to the stage
     stage.add(layer);
   };
   imageObj.src = 'images/Table.jpg';
 
   /*Calculate Chip Denominations */
   function chipbreakBreak(amount) {
+    var amount = amount.toString().split('.');
+    var amount1 = parseInt(amount[0]);
+    if (amount[1] === undefined)
+      var amount2 = 0;
+    else
+      var amount2 = parseInt(amount[1]);
     var items = new Array();
-    var units = [10000000, 5000000, 250000, 25000, 5000, 500, 1000, 100, 25, 10, 5, 1, 0.25, 0.05, 0.01];
+
+    //var amount4 = amount;
+    if (amount1 >= 25000) {
+      console.log('ss');
+      var tunits = [10000000, 5000000, 250000, 25000];
+      $.each(tunits, function(key, unit) {
+        items[unit] = parseInt(amount1 / unit);
+        amount1 %= unit;
+      });
+
+    }
+
+    var units = [5000, 500, 1000, 100, 25, 10, 5, 1];
     $.each(units, function(key, unit) {
-      items[unit] = parseInt(amount*100 / unit);
-      amount %= unit;
+      items[unit] = parseInt(amount1 / unit);
+      amount1 %= unit;
     });
+
+
+    var punits = [25, 5, 1];
+    $.each(punits, function(key, unit) {
+      items[unit / 100] = parseInt(amount2 / unit);
+      amount2 %= unit;
+    });
+
+
     return items;
   }
   /*******************Load Images*******************/
@@ -172,7 +195,7 @@
   ;
 
   /******************* Card Distribution Animation *******************/
-  function cardDistribute() {
+  function CardDistribute() {
 
     var kineticimg2 = new Kinetic.Sprite({
       x: 616,
@@ -215,45 +238,66 @@
   }
 
   /******************* Card Show Animation *******************/
-  function CardShow() {
-    var cardObj = new Image();
-    cardObj.onload = function() {
-      var x = 625;
-      var kineticimg2 = new Kinetic.Image({
-        x: x,
-        y: 338,
-        image: cardObj,
-        width: 49,
-        height: 70
+  var lastcardPos = 625;
+  function CardShow(cardarray) {
+    console.log(cardarray[0]);
+    var firstcard = new Kinetic.Sprite({
+      x: lastcardPos,
+      y: 338,
+      image: spritesImage,
+      animation: 'idle',
+      animations: createImageFromSprite(cardarray[0])
+    });
+
+    layer.add(firstcard);
+    stage.add(layer);
+
+    if (cardarray.length === 1) {
+      var tween = new Kinetic.Tween({
+        node: firstcard,
+        duration: 0.2,
+        x: lastcardPos + 50,
+        y: 338
       });
 
-      cardclone = kineticimg2.clone();
-      layer.add(cardclone);
-      stage.add(layer);
-      var i = 1;
+      tween.play();
+      lastcardPos = lastcardPos + 50;
+    }
 
+
+
+    if (cardarray.length > 2) {
+      var i = 0;
       var int = self.setInterval(function() {
-        cardclone = kineticimg2.clone({x: x});
-        console.log(x);
-        layer.add(cardclone);
+        var card = new Kinetic.Sprite({
+          x: lastcardPos,
+          y: 338,
+          image: spritesImage,
+          animation: 'idle',
+          animations: createImageFromSprite(cardarray[i + 1])
+        });
+
+        layer.add(card);
         stage.add(layer);
 
+        var newPosX = lastcardPos + 50;
         var tween = new Kinetic.Tween({
-          node: cardclone,
-          duration: 0.8,
-          x: x + 50,
+          node: card,
+          duration: 0.2,
+          x: newPosX,
           y: 338
         });
-        tween.play();
 
-        if (i >= 6)
+        tween.play();
+        if (i >= 1)
           clearInterval(int);
         i++;
-        x = x + 50;
-      }, 1000);
-    };
-
-    cardObj.src = 'images/Card.png';
+        lastcardPos = newPosX;
+        //  console.log(lastcardPos);
+      }, 500);
+    }
   }
 
-  //console.log(spriteCoordinates);
+ /******************* Card Show Animation *******************/
+ 
+ 
