@@ -1,15 +1,14 @@
   /*******************Co-ordinates for table***********************/
   var co_ordinates = {
-    table9: {cards:
-              [{x: 431, y: 250},
-                {x: 251, y: 330},
-                {x: 270, y: 527},
-                {x: 427, y: 587},
-                {x: 666, y: 585},
-                {x: 902, y: 585},
-                {x: 1077, y: 521},
-                {x: 1085, y: 333},
-                {x: 909, y: 250}],
+    table9: {cards: [{x: 431, y: 250},
+        {x: 251, y: 330},
+        {x: 270, y: 527},
+        {x: 427, y: 587},
+        {x: 666, y: 585},
+        {x: 902, y: 585},
+        {x: 1077, y: 521},
+        {x: 1085, y: 333},
+        {x: 909, y: 250}],
       chips: [{x: 466, y: 326},
         {x: 331, y: 336},
         {x: 353, y: 559},
@@ -18,7 +17,16 @@
         {x: 931, y: 572},
         {x: 1059, y: 556},
         {x: 1070, y: 368},
-        {x: 943, y: 328}]
+        {x: 943, y: 328}],
+      players: [{x: 420, y: 160, dX: 240, dY: 160},
+        {x: 160, y: 260, dX: 40, dY: 340},
+        {x: 150, y: 527, dX: 60, dY: 610},
+        {x: 415, y: 680, dX: 238, dY: 680},
+        {x: 707, y: 575, dX: 707, dY: 575},
+        {x: 890, y: 680, dX: 975, dY: 680},
+        {x: 1190, y: 527, dX: 1190, dY: 610},
+        {x: 1160, y: 260, dX: 1200, dY: 340},
+        {x: 943, y: 160, dX: 1023, dY: 200}]
     }
   };
   /*******************Chips Denominations*******************/
@@ -61,7 +69,7 @@
     layer.add(kineticimg);
     stage.add(layer);
   };
-  imageObj.src = 'images/Table.jpg';
+  imageObj.src = 'images/Table1.jpg';
 
   /*Calculate Chip Denominations */
   function chipbreakBreak(amount) {
@@ -121,9 +129,13 @@
   }
 
 
-//  loadImages(chipsImages, function(images) {
-//    loadedImages = images;
-//  });
+  loadImages({playerGrey: 'playerGrey.png',
+    playerActive: 'playerActive.png',
+    profile: 'profile-pic.png',
+    playerDetail: 'playerDetail.png',
+    playerActiveDetail: 'playerActiveDetail.png'}, function(images) {
+    loadedImages = images;
+  });
 
   var spritesImage = {};
   loadImages(['poker_table_sprites.png'], function(sprite) {
@@ -265,7 +277,6 @@
     }
 
 
-
     if (cardarray.length > 2) {
       var i = 0;
       var int = self.setInterval(function() {
@@ -298,6 +309,61 @@
     }
   }
 
- /******************* Card Show Animation *******************/
- 
- 
+  /*******************Players*******************/
+  function Players(coord) {
+    var backgroundRing = new Kinetic.Image({
+      x: coord.x,
+      y: coord.y,
+      image: loadedImages.playerGrey
+    });
+
+    var circle = new Kinetic.Circle({
+      x: coord.x + 38,
+      y: coord.y + 38,
+      radius: 35,
+      fillPatternImage: loadedImages.profile,
+      fillPatternX: -35,
+      fillPatternY: -35
+    });
+
+    var backgroundDetail = new Kinetic.Image({
+      x: coord.dX,
+      y: coord.dY,
+      image: loadedImages.playerDetail
+    });
+
+    var playerText = new Kinetic.Text({
+      x: coord.dX,
+      y: coord.dY,
+      text: "Costal Bill\n$1,259,009\nAll in",
+      fontSize: 14,
+      padding: 10,
+      lineHeight: 1.2,
+      fontFamily: 'Calibri',
+      fill: 'black'
+    });
+
+
+    layer.add(backgroundRing);
+    layer.add(circle);
+    layer.add(backgroundDetail);
+    layer.add(playerText);
+    stage.add(layer);
+    return  {backgroundRing: backgroundRing,
+      backgroundDetail: backgroundDetail,
+      playerText: playerText
+    };
+  }
+
+
+  function ChangeDetail(player) {
+    var change = Players(player);
+    change.backgroundRing.setImage(loadedImages.playerActive);
+    change.backgroundDetail.setImage(loadedImages.playerActiveDetail);
+    change.playerText.setText("John Doe\n$1,259,109\nAll in one");
+    layer.draw();
+
+
+  }
+
+  
